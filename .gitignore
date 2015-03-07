@@ -1,0 +1,4 @@
+**/.DS_Store
+**/*.pyc
+dots_backend/db
+dots_backend/test.py

@@ -154,7 +154,14 @@ class Experiment:
 ## Functions ##
 
 def read_array(filename, group, replicate):
-	'''Read in a raw array data file and return an Array instance.'''
+	'''Read in a raw array data file and return an Array instance.
+
+	Args:
+			filename (str): The filename of the raw array data file.
+			group (str): The name of the group to which this array belongs.
+			replicate (int): The replicate number within the group.
+
+	'''
 	f = open(filename, 'r')
 	lines = f.readlines()
 	values = {}

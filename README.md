@@ -9,7 +9,7 @@ isn't finished yet (more on that below).
 
 Dots has a number of dependencies including NumPy and SciPy and the least painless
 way of getting these is to use the 
-[https://store.continuum.io/cshop/anaconda/](Anaconda Python distribution) which includes
+[Anaconda Python distribution](https://store.continuum.io/cshop/anaconda/) which includes
 NumPy and SciPy and a couple of the other required dependencies like Pandas, Scikit-learn
 and Bokeh.
 

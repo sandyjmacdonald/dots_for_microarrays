@@ -10,7 +10,7 @@ from pandas.util.testing import assert_frame_equal
 from ..dots_backend.dots_arrays import read_array, Array, read_experiment, Experiment
 
 ## Reading in an array and pulling out everything we needs for the tests.
-array_fn = 'sample_data/treated_1.txt'
+array_fn = 'dots_sample_data/treated_1.txt'
 group, replicate = array_fn.split('/')[-1].split('.')[0].split('_')
 f = open(array_fn, 'r')
 lines = f.readlines()
@@ -92,7 +92,7 @@ def test_read_array():
 ## Tests for the Experiment class and associated attributes and methods ##
 
 ## Read in all of the arrays and create a couple of Experiment instances to test.
-array_filenames = glob.glob('sample_data/*.txt')
+array_filenames = glob.glob('dots_sample_data/*.txt')
 sampleids = [fn.split('/')[-1].split('.')[0] for fn in array_filenames]
 experiment = read_experiment(array_filenames)
 experiment_2 = read_experiment(array_filenames, baseline=False)

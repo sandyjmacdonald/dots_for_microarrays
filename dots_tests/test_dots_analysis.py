@@ -11,7 +11,7 @@ from ..dots_backend.dots_arrays import read_experiment
 from ..dots_backend.dots_analysis import run_pca, get_fold_changes, run_stats, find_clusters, get_clusters
 
 ## Read in all of the arrays and create an Experiment instance to test.
-array_filenames = glob.glob('sample_data/*.txt')
+array_filenames = glob.glob('dots_sample_data/*.txt')
 sampleids = [fn.split('/')[-1].split('.')[0] for fn in array_filenames]
 experiment = read_experiment(array_filenames)
 

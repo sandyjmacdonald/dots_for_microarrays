@@ -8,20 +8,22 @@ setup(
     packages=['dots_backend', 'dots_tests'],
     scripts=['dots_scripts/dots_workflow.py'],
     url='https://github.com/sandyjmacdonald/dots_for_microarrays',
-    license='LICENSE.md',
+    license='LICENSE',
     description='Simple analysis of Agilent one-color arrays.',
-    long_description=open('README.md').read(),
+    long_description=open('README').read(),
     install_requires=[
         'numpy',
         'scipy',
         'pandas',
         'statsmodels',
+        'scikit-learn',
         'bokeh',
         'pillow',
-        'brewer2mpl'
+        'brewer2mpl',
+        'nose'
     ],
     setup_requires=[
         'nose',
-        'numpy'
+        'numpy',
     ]
 )

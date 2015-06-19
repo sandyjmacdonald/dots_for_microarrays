@@ -1,4 +1,5 @@
 **/.DS_Store
 **/*.pyc
 dots_backend/db
-dots_backend/test.py
+dots_backend/scratch.py
+sample_data_two

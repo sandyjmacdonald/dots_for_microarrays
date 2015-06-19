@@ -41,19 +41,11 @@ plot showing the distributions of the intensity values in each sample.
 #!/usr/bin/env python
 
 import glob
-import time
-from dots_plotting import do_boxplot, do_pcaplot
-from dots_arrays import Experiment, read_array
+from dots_plotting import do_boxplot
+from dots_arrays import read_experiment
 
-arrays = []
-
-for f in glob.glob('../sample_data/*.txt'):
-	group, replicate = f.split('/')[-1].split('.')[0].split('_')
-	replicate = int(replicate)
-	norm_array = read_array(f, group, replicate).normalise()
-	arrays.append(norm_array)
-
-experiment = Experiment(arrays)
+array_filenames = glob.glob('../sample_data/*.txt')
+experiment = read_experiment(array_filenames)
 experiment = experiment.baseline_to_median()
 
 do_boxplot(experiment)
@@ -66,6 +58,8 @@ It's equally simple to read that experiment we just created into a SQLite3
 database.
 
 ```python
+from dots_db import load_experiment_into_db
+
 db_id = load_experiment_into_db(experiment)
 ```
 

@@ -261,3 +261,44 @@ and normalised expression values to tab-separated files. You can run them as fol
 write_fcs_stats(experiment, outfile='foldchanges_stats.txt')
 write_normalised_expression(experiment, outfile='normalised_expression.txt')
 ```
+
+## The dots_plotting module
+
+Dots uses (the totally awesome) Bokeh to create pretty plots of your array data. As explained
+above, it provides a number of different visualisations of the data:
+
+* box and whisker plots of the normalised data for each sample
+* a PCA plot of all of the samples
+* a hierarchically-clustered (by gene) heatmap for the significantly differentially expressed genes
+* a plot of k-means clustered groups of genes with similar expression patterns across the samples
+* volcano plots for each pair of samples
+
+All of the plot functions work similarly apart from the `do_volcanoplot` function. Here are examples
+of how to produce some plots from an experiment instance:
+
+```python
+do_boxplot(experiment, show=False, image=False, html_file='boxplot.html')
+do_pcaplot(experiment, show=False, image=False, html_file='pcaplot.html')
+do_heatmap(experiment, show=False, image=False, html_file='heatmap.html')
+do_clusters_plot(experiment, show=True, image=False, html_file='clustersplot.html')
+```
+
+As you'll see, they all take an experiment instance and have a number of other optional arguments. 
+The `show=False/True` argument determines whether the plot is shown in your browser after it is 
+generated, with the default being false. The `image=False/True` argument determines whether a PNG 
+format image of the plot is created in addition to the HTML version. Lastly, the `html_file='boxplot.html'`
+allows you to specify a custom filename for your HTML plot (this is also used for the image filename).
+
+All of the plots, with the exception of the clusters plot, use Bokeh's nifty hover function to show
+you information about the points on the plots, e.g. gene name, normalised expression values, etc.
+
+The `do_volcanoplot` function takes an additional argument (a tuple) that specifies the pair of groups 
+to plot on the volcano plot, for example:
+
+```python
+do_volcanoplot(experiment, ('treated', 'untreated'), show=False, image=False, html_file='volcano_plot.html')
+```
+
+**Note that the function, `render_plot_to_png`, that generates the PNG versions of the plots requires the
+[PhantomJS](http://phantomjs.org) JavaScript API to be installed (it's essentially a headless browser) to
+work properly.**

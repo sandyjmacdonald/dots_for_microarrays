@@ -67,8 +67,24 @@ and volcano plots for each pair of samples.
 
 1. Read the array data into an SQLite3 database, signifcantly speeding the whole workflow if 
 you re-analyse your array data at a later date.
-2. Provide a web front-end to guide you through the workflow.
-3. (Possibly) read in Affymetrix array data.
-4. Use linear models (similar to Limma) for the stats.
-5. Run functional analyses (Gene Ontology, pathways).
-6. ~~Make you a cappuccino while you wait.~~
+2. Assess the quality of the arrays.
+3. Provide a web front-end to guide you through the workflow.
+4. (Possibly) read in Affymetrix array data.
+5. Use linear models (similar to Limma) for the stats.
+6. Run functional analyses (Gene Ontology, pathways).
+7. ~~Make you a cappuccino while you wait.~~
+
+## Quick start
+
+Dots has a handy workflow script that takes as input a folder containing some Agilent array
+files (labelled correctly as explained above) and reads in the data, normalises it, and
+produces tables of data and all of the various volcano plots, etc.
+
+You can run it, for example, on the sample data included here (in `dots_sample_data`) with:
+
+```bash
+python dots_workflow.py dots_sample_data -o sample_data_output
+```
+
+The `-o` is an optional argument and, if you don't include it, then they'll be put in a 
+folder named `output`.

@@ -1,4 +1,4 @@
-# Dots for microarrays
+# Dots
 
 Dots is a Python package for working with microarray data. 
 Its back-end is a standalone package for reading in, normalisation, statistical 
@@ -272,6 +272,12 @@ above, it provides a number of different visualisations of the data:
 * a hierarchically-clustered (by gene) heatmap for the significantly differentially expressed genes
 * a plot of k-means clustered groups of genes with similar expression patterns across the samples
 * volcano plots for each pair of samples
+
+You can see a couple of examples of the plots below.
+
+![boxplot](assets/boxplot.png)
+
+![volcanoplot](assets/volcanoplot.png)
 
 All of the plot functions work similarly apart from the `do_volcanoplot` function. Here are examples
 of how to produce some plots from an experiment instance:

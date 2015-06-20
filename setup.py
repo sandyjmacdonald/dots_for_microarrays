@@ -10,7 +10,7 @@ setup(
     url='https://github.com/sandyjmacdonald/dots_for_microarrays',
     license='LICENSE',
     description='Simple analysis of Agilent one-color arrays.',
-    long_description=open('README').read(),
+    long_description=open('README.md').read(),
     install_requires=[
         'numpy',
         'scipy',

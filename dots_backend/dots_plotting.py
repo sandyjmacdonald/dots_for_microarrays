@@ -172,7 +172,7 @@ def do_boxplot(experiment, show=False, image=False, html_file='boxplot.html'):
 		bp.save(obj=boxplot)
 
 	if image == True:
-		render_plot_to_png(html_file, height=600, width=900, crop='side')
+		render_plot_to_png(html_file, height=600, width=900, crop='top')
 
 	return html_file
 

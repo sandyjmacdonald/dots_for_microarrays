@@ -275,9 +275,9 @@ above, it provides a number of different visualisations of the data:
 
 You can see a couple of examples of the plots below.
 
-![boxplot](assets/boxplot.png)
+![boxplot](assets/boxplot.jpg)
 
-![volcanoplot](assets/volcanoplot.png)
+![volcanoplot](assets/volcanoplot.jpg)
 
 All of the plot functions work similarly apart from the `do_volcanoplot` function. Here are examples
 of how to produce some plots from an experiment instance:

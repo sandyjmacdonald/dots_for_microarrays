@@ -7,7 +7,7 @@ isn't finished yet (more on that below).
 
 ## Installation
 
-Dots has a number of dependencies including NumPy and SciPy and the least painless
+Dots has a number of dependencies including NumPy and SciPy and the least painful
 way of getting these is to use the 
 [Anaconda Python distribution](https://store.continuum.io/cshop/anaconda/) which includes
 NumPy and SciPy and a couple of the other required dependencies like Pandas, Scikit-learn

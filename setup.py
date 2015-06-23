@@ -11,7 +11,7 @@ setup(
     download_url='https://github.com/sandyjmacdonald/dots_for_microarrays/tarball/0.1.0',
     license='LICENSE.txt',
     description='Simple analysis of Agilent one-color arrays.',
-    keywords = ['bioinformatics', 'genomics', 'microarrays']
+    keywords = ['bioinformatics', 'genomics', 'microarrays'],
     install_requires=[
         'numpy',
         'scipy',

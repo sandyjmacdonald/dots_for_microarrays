@@ -7,6 +7,12 @@ isn't finished yet (more on that below).
 
 ## Installation
 
+**UPDATE:** Dots is now on PyPi! As an alternative to the method below, you can install it as follows:
+
+```
+sudo pip install dots_for_microarrays
+```
+
 Dots has a number of dependencies including NumPy and SciPy and the least painful
 way of getting these is to use the 
 [Anaconda Python distribution](https://store.continuum.io/cshop/anaconda/) which includes

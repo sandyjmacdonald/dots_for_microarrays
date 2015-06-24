@@ -1,5 +1,7 @@
 # Dots
 
+[![Build Status](https://travis-ci.org/sandyjmacdonald/dots_for_microarrays.svg?branch=develop)](https://travis-ci.org/sandyjmacdonald/dots_for_microarrays)
+
 Dots is a Python package for working with microarray data. 
 Its back-end is a standalone package for reading in, normalisation, statistical 
 analysis and plotting of Agilent single-colour microarray data. Its front-end
@@ -7,11 +9,13 @@ isn't finished yet (more on that below).
 
 ## Installation
 
-**UPDATE:** Dots is now on PyPi! As an alternative to the method below, you can install it as follows:
+**UPDATE:** Dots is now on PyPi! You can install it as follows:
 
 ```
 sudo pip install dots_for_microarrays
 ```
+
+**OR, ALTERNATIVELY:**
 
 Dots has a number of dependencies including NumPy and SciPy and the least painful
 way of getting these is to use the 

@@ -183,7 +183,7 @@ def read_array(filename, group, replicate):
 	f = open(filename, 'r')
 	lines = f.readlines()
 	values = {}
-	headers = lines[9].split('\t')
+	headers = lines[9].rstrip().split('\t')
 	
 	## Compile a list of indices for the various items that will be pulled out of the file.
 	for i, h in enumerate(headers):
@@ -205,7 +205,7 @@ def read_array(filename, group, replicate):
 	## Split the lines up and use the indices to pull out the values and add them 
 	## to the values dictionary.
 	for l in lines[10:]:
-		l = l.split('\t')
+		l = l.rstrip().split('\t')
 		if l[control_type_ind] == '0':
 			if 'GeneName' in headers and 'Description' in headers: 
 				values[l[feature_num_ind]] = { 'FeatureNum': l[feature_num_ind], \

@@ -1,8 +1,21 @@
 language: python
 python:
   - "2.7"
-# command to install
+
+# Setup Anaconda
+before_install:
+  - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+  - chmod +x miniconda.sh
+  - ./miniconda.sh -b
+  - export PATH=/home/travis/miniconda/bin:$PATH
+  - conda update --yes conda
+  - sudo rm -rf /dev/shm
+  - sudo ln -s /run/shm /dev/shm
+
+# Install packages
 install:
-  - "pip install ."
-# command to run tests
-script: nosetests
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy pandas statsmodels scikit-learn bokeh pillow nose
+  - sudo pip install .
+
+# Test
+script: nosetests -v

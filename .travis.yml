@@ -22,7 +22,7 @@ install:
   # Replace dep1 dep2 ... with your dependencies
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pip atlas numpy scipy pandas statsmodels scikit-learn bokeh pillow nose
   - source activate test-environment
-  - sudo python setup.py install
+  - sudo pip install .
 
 # Test
 script: nosetests -v

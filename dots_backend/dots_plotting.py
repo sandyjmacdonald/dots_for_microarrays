@@ -240,7 +240,7 @@ def do_volcanoplot(experiment, groups, show=False, image=False, html_file='volca
 	merged_df = pd.merge(fcs, stats, on = 'FeatureNum')
 	fc_cols = [x for x in merged_df.columns.values if 'logFC' in x]
 	fc_tuples = [(col[6:].split('_')[0], col[6:].split('_')[1]) for col in fc_cols]
-	sorted_groups = sorted(groups)
+	sorted_groups = tuple(sorted(groups))
 	sig_col = 'significant_%s_%s' % sorted_groups
 	rev_groups = groups[::-1]
 	if groups in fc_tuples:

@@ -4,7 +4,6 @@
 import os
 import subprocess
 import StringIO
-import brewer2mpl as brwr
 import bokeh.plotting as bp
 import bokeh.models as bm
 import pandas as pd
@@ -14,6 +13,7 @@ from dots_analysis import run_pca, run_stats, get_fold_changes, get_clusters
 from dots_arrays import Experiment
 from collections import OrderedDict
 from bokeh.charts import Line
+from palettable.colorbrewer.diverging import RdYlGn_11
 
 ## Functions ##
 
@@ -294,7 +294,7 @@ def do_heatmap(experiment, show=False, image=False, html_file='heatmap.html'):
 	vals_only = cluster_df[norm_exp_cols]
 
 	## Set up the colour scheme.
-	colourmap = brwr.get_map('RdYlGn', 'Diverging', 11).hex_colors
+	colourmap = RdYlGn_11.hex_colors
 	limit = np.abs(vals_only.values).max()
 	val_to_colour = lambda x: int((x + limit) * (len(colourmap)/(2*limit)))
 	

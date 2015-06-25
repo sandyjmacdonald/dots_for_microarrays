@@ -29,7 +29,7 @@ setup(
         'scikit-learn',
         'bokeh',
         'pillow',
-        'brewer2mpl',
+        'palettable',
         'nose'
     ],
     setup_requires=[

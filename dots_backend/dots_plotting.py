@@ -240,6 +240,8 @@ def do_volcanoplot(experiment, groups, show=False, image=False, html_file='volca
 	merged_df = pd.merge(fcs, stats, on = 'FeatureNum')
 	fc_cols = [x for x in merged_df.columns.values if 'logFC' in x]
 	fc_tuples = [(col[6:].split('_')[0], col[6:].split('_')[1]) for col in fc_cols]
+	sorted_groups = sorted(groups)
+	sig_col = 'significant_%s_%s' % sorted_groups
 	rev_groups = groups[::-1]
 	if groups in fc_tuples:
 		column = 'logFC_%s_%s' % groups
@@ -248,7 +250,10 @@ def do_volcanoplot(experiment, groups, show=False, image=False, html_file='volca
 		column = 'logFC_%s_%s' % groups
 		merged_df[column] = merged_df[orig_column] * -1
 	merged_df['neg_log_10_p_val'] = -1 * np.log10(merged_df['p_val_adj'])
-	merged_df['colour'] = np.where((abs(merged_df[column]) > 1) & (merged_df['p_val_adj'] < 0.05), 'blue', 'red')
+	if len(fc_cols) > 1:
+		merged_df['colour'] = np.where((abs(merged_df[column]) > 1) & (merged_df['p_val_adj'] < 0.05) & (merged_df[sig_col] == True), 'blue', 'red')
+	else:
+		merged_df['colour'] = np.where((abs(merged_df[column]) > 1) & (merged_df['p_val_adj'] < 0.05), 'blue', 'red')
 	source = bp.ColumnDataSource(data=dict(logfc=merged_df[column].tolist(), pval=merged_df['p_val_adj'].tolist(), gene=merged_df['GeneName'].tolist()))
 
 	## Create the plot, label axes and format the points.

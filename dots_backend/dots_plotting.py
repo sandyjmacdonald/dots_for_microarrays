@@ -233,7 +233,8 @@ def do_volcanoplot(experiment, groups, show=False, image=False, html_file='volca
 	stats = run_stats(experiment)
 
 	## Strip out extraneous data from stats data frame.
-	stats = stats[['FeatureNum', 'p_val', 'p_val_adj']].copy()
+	sig_cols = [x for x in stats.columns.values if 'significant' in x]
+	stats = stats[['FeatureNum', 'p_val', 'p_val_adj'] + sig_cols].copy()
 
 	## Merge the fold changes and stats data frames, create new columns for 
 	## -log 10 adj. p value and spot colours.

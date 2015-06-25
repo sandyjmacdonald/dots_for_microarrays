@@ -227,7 +227,7 @@ def read_array(filename, group, replicate):
 
 	return Array(array_df, filename, group, replicate)
 
-def read_experiment(array_filenames, baseline=True):
+def read_experiment(array_filenames, baseline=False):
 	'''Read in a series of array data files and return an Experiment instance.
 
 	Args:

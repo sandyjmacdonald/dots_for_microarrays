@@ -4,9 +4,9 @@ python:
 
 # Install
 install:
-  - sudo apt-get update
-  - sudo apt-get install gfortran libblas-dev libatlas-dev liblapack-dev
-  - python setup.py install
+  - sudo apt-get -q update
+  - sudo apt-get -q install gfortran libblas-dev libatlas-dev liblapack-dev
+  - python setup.py -q install
 
 # Test
 script: nosetests -v

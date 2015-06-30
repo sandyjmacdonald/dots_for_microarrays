@@ -74,7 +74,7 @@ and volcano plots for each pair of samples.
 6. Generates tab-separated tables of the normalised data and fold change and statstical analysis.
 7. Did I mention the hover-y plots? It has hover-y plots.
 
-![volcanoplot_hover](assets/volcanoplot_hover.jpg)
+![volcanoplot_hover](assets/volcanoplot_hover.gif)
 
 ## What Dots will do in the future
 

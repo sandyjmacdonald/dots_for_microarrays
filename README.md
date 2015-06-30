@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/sandyjmacdonald/dots_for_microarrays.png?label=ready&title=Ready)](https://waffle.io/sandyjmacdonald/dots_for_microarrays)
 # Dots
 
 Dots is a Python package for working with microarray data. 

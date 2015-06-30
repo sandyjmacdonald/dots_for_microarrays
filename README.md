@@ -72,6 +72,9 @@ normalised data for each sample, a PCA plot of all of the samples, a hierarchica
 a plot of k-means clustered groups of genes with similar expression patterns across the samples,
 and volcano plots for each pair of samples.
 6. Generates tab-separated tables of the normalised data and fold change and statstical analysis.
+7. Did I mention the hover-y plots? It has hover-y plots.
+
+![volcanoplot_hover](assets/volcanoplot_hover.jpg)
 
 ## What Dots will do in the future
 

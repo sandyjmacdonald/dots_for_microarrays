@@ -104,8 +104,8 @@ def test_read_experiment():
 def test_arrays_attribute():
 	assert_frame_equal(experiment_2.arrays[0].df.sort(axis=1), array.df.sort(axis=1), check_names=True)
 	assert_equals(sorted(experiment.get_sampleids()), sorted(sampleids))
-	print experiment_2.arrays[0].df.head()
-	print array.df.head()
+	print experiment_2.arrays[0].df
+	print array.df
 
 def test_baseline_to_median_method():
 	assert_equals(experiment.baseline_to_median().has_baseline_to_median(), True)

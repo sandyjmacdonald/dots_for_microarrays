@@ -9,4 +9,4 @@ install:
   - python setup.py -q install
 
 # Test
-script: nosetests -v
+script: nosetests -v -s

@@ -47,7 +47,6 @@ def test_find_clusters():
 
 def test_get_clusters():
 	cluster_df = get_clusters(experiment)
-	print cluster_df.columns.values
 	assert(isinstance(cluster_df, pd.DataFrame))
 	num_cols = 9 + (2 * len(list(combinations(experiment.groups, 2)))) + len(experiment.get_sampleids())
 	assert_equals(len(cluster_df.columns.values), num_cols)

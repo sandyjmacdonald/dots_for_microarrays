@@ -104,6 +104,8 @@ def test_read_experiment():
 def test_arrays_attribute():
 	exp_df = experiment_2.arrays[0].df.sort(axis=1)
 	array_df = array.df.sort(axis=1)
+	print exp_df
+	print array_df
 	assert_frame_equal(exp_df, array_df, check_names=True)
 	assert_equals(sorted(experiment.get_sampleids()), sorted(sampleids))
 

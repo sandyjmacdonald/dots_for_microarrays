@@ -1,6 +1,6 @@
 # Dots
 
-[![Build Status](https://travis-ci.org/sandyjmacdonald/dots_for_microarrays.svg?branch=develop)](https://travis-ci.org/sandyjmacdonald/dots_for_microarrays) [![PyPI](https://img.shields.io/pypi/v/nine.svg)]([![PyPI](https://img.shields.io/pypi/dd/Django.svg)](https://pypi.python.org/pypi/dots_for_microarrays/0.1.2)) [![PyPI](https://img.shields.io/pypi/dd/Django.svg)]([![PyPI](https://img.shields.io/pypi/v/nine.svg)]([![PyPI](https://img.shields.io/pypi/dd/Django.svg)](https://pypi.python.org/pypi/dots_for_microarrays/0.1.2)))
+[![Build Status](https://travis-ci.org/sandyjmacdonald/dots_for_microarrays.svg?branch=develop)](https://travis-ci.org/sandyjmacdonald/dots_for_microarrays)
 
 Dots is a Python package for working with microarray data. 
 Its back-end is a standalone package for reading in, normalisation, statistical 

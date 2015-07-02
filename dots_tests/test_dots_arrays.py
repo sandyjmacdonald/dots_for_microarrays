@@ -102,10 +102,9 @@ def test_read_experiment():
 	assert_equals(len(experiment.get_sampleids()), len(array_filenames))
 
 def test_arrays_attribute():
-	exp_df = experiment_2.arrays[0].df.sort(axis=1)
+	array_exp = [array for array in experiment_2.arrays if array.sampleid == 'treated_1'][0]
+	exp_df = array_exp.df.sort(axis=1)
 	array_df = array.df.sort(axis=1)
-	print exp_df
-	print array_df
 	assert_frame_equal(exp_df, array_df, check_names=True)
 	assert_equals(sorted(experiment.get_sampleids()), sorted(sampleids))
 

@@ -5,6 +5,7 @@ from nose import with_setup
 from nose.tools import assert_equals
 import pandas as pd
 import numpy as np
+import numpy.testing as npt
 import glob
 from pandas.util.testing import assert_frame_equal
 from ..dots_backend.dots_arrays import read_array, Array, read_experiment, Experiment
@@ -105,7 +106,7 @@ def test_arrays_attribute():
 	array_exp = [array for array in experiment_2.arrays if array.sampleid == 'treated_1'][0]
 	exp_df = array_exp.df.sort(axis=1)
 	array_df = array.df.sort(axis=1)
-	assert_frame_equal(exp_df, array_df, check_names=True)
+	npt.assert_array_equal(exp_df, array_df)
 	assert_equals(sorted(experiment.get_sampleids()), sorted(sampleids))
 
 def test_baseline_to_median_method():

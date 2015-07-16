@@ -6,7 +6,14 @@ python:
 install:
   - sudo apt-get -q update
   - sudo apt-get -q install gfortran libblas-dev libatlas-dev liblapack-dev
+  - pip install python-coveralls
+  - pip install coverage
   - python setup.py -q install
 
 # Test
-script: nosetests -v -s
+script: 
+  - nosetests --with-coverage
+
+# Coveralls
+after_success:
+  - coveralls

@@ -113,6 +113,12 @@ class Experiment:
 		## The dataframe with all of the data in it.
 		self.df = master_array
 
+		## Reorder the columns.
+		if all([sampleid.split('_')[0].isdigit() for sampleid in self.get_sampleids()]):
+			self.df = self.df[list(self.df.columns.values)[:5] + sorted(self.get_sampleids(), key=lambda x:int(x.split('_')[0]))]
+		else:
+			self.df = self.df[list(self.df.columns.values)[:5] + sorted(self.get_sampleids())]
+
 	def baseline_to_median(self):
 		'''For each row in the data frame of an Experiment instance, set the median value to zero.'''
 
@@ -170,7 +176,7 @@ class Experiment:
 
 ## Functions ##
 
-def read_array(filename, group, replicate):
+def read_array(filename, group, replicate, annotations=None):
 	'''Read in a raw array data file and return an Array instance.
 
 	Args:
@@ -214,6 +220,13 @@ def read_array(filename, group, replicate):
 											   'SystematicName': l[sys_name_ind], \
 											   'Description': l[desc_name_ind], \
 											   'gProcessedSignal': l[signal_ind] }
+			elif annotations is not None:
+				values[l[feature_num_ind]] = { 'FeatureNum': l[feature_num_ind], \
+											   'ProbeName': l[probe_name_ind], \
+											   'GeneName': annotations[l[probe_name_ind]]['GeneName'], \
+											   'SystematicName': l[sys_name_ind], \
+											   'Description': annotations[l[probe_name_ind]]['Description'], \
+											   'gProcessedSignal': l[signal_ind] }
 			else:
 				values[l[feature_num_ind]] = { 'FeatureNum': l[feature_num_ind], \
 											   'ProbeName': l[probe_name_ind], \
@@ -227,7 +240,7 @@ def read_array(filename, group, replicate):
 
 	return Array(array_df, filename, group, replicate)
 
-def read_experiment(array_filenames, baseline=False):
+def read_experiment(array_filenames, baseline=False, annotations=None):
 	'''Read in a series of array data files and return an Experiment instance.
 
 	Args:
@@ -244,7 +257,7 @@ def read_experiment(array_filenames, baseline=False):
 	for a in array_filenames:
 		group, replicate = a.split('/')[-1].split('.')[0].split('_')
 		replicate = int(replicate)
-		norm_array = read_array(a, group, replicate).normalise()
+		norm_array = read_array(a, group, replicate, annotations).normalise()
 		arrays.append(norm_array)
 
 	experiment = Experiment(arrays)
@@ -252,3 +265,38 @@ def read_experiment(array_filenames, baseline=False):
 		experiment = experiment.baseline_to_median()
 	
 	return experiment
+
+def read_annotations(annotation_file):
+	'''Read in an Agilent annotation file and return a dictionary
+	of annotations.
+
+	Args:
+			annotation_file (str): The filename of the annotation file.
+
+	'''
+
+	f = open(annotation_file, 'r')
+	lines = [l for l in f.readlines() if not l.startswith('#') and not l.startswith('^')]
+	headers = lines[0].rstrip().split('\t')
+
+	## Compile a list of indices for the various items that will be pulled out of the file.	
+	for i, h in enumerate(headers):
+		if h == 'ProbeName' or h == 'NAME':
+			probe_name_ind = i
+		elif h == 'GeneName' or h == 'GENE_SYMBOL':
+			gene_name_ind = i
+		elif h == 'Description' or h == 'DESCRIPTION':
+			desc_name_ind = i
+		elif h == 'ControlType' or h == 'CONTROL_TYPE':
+			control_type_ind = i
+
+	## Dictionary to which annotations are added.
+	annotations = {}
+
+	## Add the annotations to the dictionary.	
+	for l in lines[1:]:
+		l = l.rstrip().split('\t')
+		if l[control_type_ind] not in ['pos', 1, 'ignore', 'neg']:
+			annotations[l[probe_name_ind]] = {'GeneName': l[gene_name_ind], 'Description': l[desc_name_ind]}
+
+	return annotations

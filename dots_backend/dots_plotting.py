@@ -3,6 +3,7 @@
 
 import os
 import subprocess
+import random
 import StringIO
 import bokeh.plotting as bp
 import bokeh.models as bm
@@ -125,26 +126,27 @@ def do_boxplot(experiment, show=False, image=False, html_file='boxplot.html'):
 	upper = q2 + 1.5*iqr
 	lower = q2 - 1.5*iqr
 
-	## Lists to store the values in.
+	## Lists to store the outliers in.
 	outx = []
 	outy = []
 
 	group_names = []
 
-	## Add all of the data to the lists.
+	## Sort the groups into alphabetical order.
+	if all([group.split('_')[0].isdigit() for group in group_names]):
+			group_names = sorted(group_names, key=lambda x:int(x.split('_')[0]))
+	else:
+		group_names = sorted(group_names)
+
+	## Add them to the list of group names.
 	for group_name, group in groups:
 		group_names.append(group_name)
-		for value in group[(group > upper[group_name]) | (group < lower[group_name])].get_values():
-			outx.append(group_name)
-			outy.append(value)
-
-	## Sort the groups into alphabetical order.
-	group_names.sort()
 
 	## Create the plot.
 	bp.output_file(html_file)
 	boxplot = create_standard_plot(h=600, w=900, x_range=group_names)
 	boxplot.xgrid.grid_line_color = None
+	boxplot.xaxis.major_label_orientation = np.pi/3
 	
 	qmin = groups.quantile(q=0.00)
 	qmax = groups.quantile(q=1.00)
@@ -163,6 +165,23 @@ def do_boxplot(experiment, show=False, image=False, html_file='boxplot.html'):
 	boxplot.rect(group_names, lower_values, 0.2, 0.01, line_color='#265B99')
 	boxplot.rect(group_names, upper_values, 0.2, 0.01, line_color='#265B99')
 
+	## Hackiness to make sure the plots don't fail with many values.
+	## Randomly samples 250,000 values, which seems to work.
+
+	df_copy = experiment.df.copy()
+	exp_shape = experiment.get_exp_values().shape
+	num_rows = 250000/exp_shape[1]
+
+	if num_rows < exp_shape[0]:
+		experiment.df = experiment.df.ix[random.sample(experiment.df.index, num_rows)]
+		groups = experiment.get_exp_values().unstack().groupby(level=0)
+
+	## Add all of the outliers to the lists.
+	for group_name, group in groups:
+		for value in group[(group > upper[group_name]) | (group < lower[group_name])].get_values():
+			outx.append(group_name)
+			outy.append(value)
+
 	boxplot.rect(outx, outy, 0.05, 0.01, color='#FF4444', fill_alpha=0.6)
 
 	## Shows the plot.
@@ -173,6 +192,8 @@ def do_boxplot(experiment, show=False, image=False, html_file='boxplot.html'):
 
 	if image == True:
 		render_plot_to_png(html_file, height=600, width=900, crop='top')
+
+	experiment.df = df_copy
 
 	return html_file
 
@@ -300,9 +321,9 @@ def do_heatmap(experiment, show=False, image=False, html_file='heatmap.html'):
 	vals_only = cluster_df[norm_exp_cols]
 
 	## Set up the colour scheme.
-	colourmap = RdYlGn_11.hex_colors
+	colourmap = RdYlGn_11.hex_colors[::-1]
 	limit = np.abs(vals_only.values).max()
-	val_to_colour = lambda x: int((x + limit) * (len(colourmap)/(2*limit)))
+	val_to_colour = lambda x: int((x + limit) * (len(colourmap)/(2*limit))) - 1
 	
 	## Empty lists to which we can add the data for the heatmap.
 	vals = []
@@ -391,9 +412,10 @@ def do_clusters_plot(experiment, show=True, image=False, html_file='clustersplot
 		xvals = vals.columns.values.tolist()
 		yvals = vals.values.tolist()
 		clusterplot = create_standard_plot(tools='save')
+		clusterplot.yaxis.axis_label = 'normalised expression'
 		
 		for y in yvals:
-			clusterplot.line(range(len(xvals)), y, ylabel='normalised expression', legend=False)
+			clusterplot.line(range(len(xvals)), y, legend=False)
 
 		plots.append([clusterplot])
 

@@ -247,8 +247,13 @@ def get_clusters(experiment, how='hierarchical'):
 	merged_df = pd.merge(merged_df, fcs, on='FeatureNum')
 	
 	## Filter the merged data frame to leave only significantly differentially
-	## expressed genes (adj. p < 0.05, fold change > +/- 2).
-	filtered_df = merged_df[(merged_df['p_val_adj'] < 0.05) & ((abs(merged_df[fc_cols]) > np.log2(1.0)).any(1) == True) & ((merged_df[abs_mean_diff_cols] > 0.5).any(1) == True)].copy()
+	## expressed genes (adj. p < 0.05. Also, increase the fold change cutoff until there
+	## are less than 2,500 rows left in the data frame (so that heat maps can be drawn).
+	filtered_df = merged_df[(merged_df['p_val_adj'] < 0.05) & ((abs(merged_df[fc_cols]) > np.log2(float(1))).any(1) == True) & ((merged_df[abs_mean_diff_cols] > 0.5).any(1) == True)].copy()
+	i = 2
+	while len(filtered_df) * len(experiment.get_sampleids()) > 40000:
+		filtered_df = merged_df[(merged_df['p_val_adj'] < 0.05) & ((abs(merged_df[fc_cols]) > np.log2(float(i))).any(1) == True) & ((merged_df[abs_mean_diff_cols] > 0.5).any(1) == True)].copy()
+		i += 1
 
 	## Clean up.
 	del merged_df

@@ -1,6 +1,6 @@
 # Dots
 
-[![Build Status](https://travis-ci.org/sandyjmacdonald/dots_for_microarrays.svg?branch=develop)](https://travis-ci.org/sandyjmacdonald/dots_for_microarrays)
+[![Build Status](https://travis-ci.org/sandyjmacdonald/dots_for_microarrays.svg?branch=master)](https://travis-ci.org/sandyjmacdonald/dots_for_microarrays) [![Coverage Status](https://coveralls.io/repos/sandyjmacdonald/dots_for_microarrays/badge.svg?branch=master&service=github)](https://coveralls.io/github/sandyjmacdonald/dots_for_microarrays?branch=master)
 
 Dots is a Python package for working with microarray data. 
 Its back-end is a standalone package for reading in, normalisation, statistical 
@@ -205,6 +205,24 @@ experiment = experiment.remove_sample('treated_1')
 
 This method will be of more use once the quality control features are added, allowing you to remove 
 samples that are of low quality before proceeding with the analysis and plotting.
+
+### The read_annotations function
+
+For array files that lack gene symbols or descriptions, you can pass in an annotations file that
+you downloaded from the Agilent website or from the NCBI GEO database. These annotations will be
+added to your Array and Experiment class instances.
+
+The `read_annotations` function takes a filename as an argument and returns a dictionary of the
+annotations with the key being the probename and the values being a dictionary of `GeneName` and
+`Description`
+
+You can read them in as part of your `read_experiment` call as follows:
+
+```python
+experiment = read_experiment(array_filenames, baseline=True, annotations_file='annotations.txt')
+```
+
+Note that the `annotations_file` is an 
 
 ## The dots_analysis module
 

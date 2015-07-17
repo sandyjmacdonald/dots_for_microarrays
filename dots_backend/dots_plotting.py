@@ -147,7 +147,7 @@ def do_boxplot(experiment, show=False, image=False, html_file='boxplot.html'):
 	boxplot = create_standard_plot(h=600, w=900, x_range=group_names)
 	boxplot.xgrid.grid_line_color = None
 	boxplot.xaxis.major_label_orientation = np.pi/3
-	
+
 	qmin = groups.quantile(q=0.00)
 	qmax = groups.quantile(q=1.00)
 
@@ -257,7 +257,7 @@ def do_volcanoplot(experiment, groups, show=False, image=False, html_file='volca
 	sig_cols = [x for x in stats.columns.values if 'significant' in x]
 	stats = stats[['FeatureNum', 'p_val', 'p_val_adj'] + sig_cols].copy()
 
-	## Merge the fold changes and stats data frames, create new columns for 
+	## Merge the fold changes and stats data frames, create new columns for
 	## -log 10 adj. p value and spot colours.
 	merged_df = pd.merge(fcs, stats, on = 'FeatureNum')
 	fc_cols = [x for x in merged_df.columns.values if 'logFC' in x]
@@ -284,11 +284,11 @@ def do_volcanoplot(experiment, groups, show=False, image=False, html_file='volca
 	volcanoplot.xaxis.axis_label = 'log 2 fold change, ' + column
 	volcanoplot.yaxis.axis_label = '- log 10 p value'
 	volcanoplot.circle(merged_df[column], merged_df['neg_log_10_p_val'], color=merged_df['colour'], fill_alpha=0.4, line_alpha=0, size=5, source=source)
-	
+
 	## Set up the hover tooltips.
 	hover = volcanoplot.select(dict(type=bm.HoverTool))
 	hover.tooltips = [('log 2 FC', '@logfc'), ('adj. p value', '@pval'), ('gene', '@gene')]
-	
+
 	## Shows the plot.
 	if show == True:
 		bp.show(volcanoplot)
@@ -297,7 +297,7 @@ def do_volcanoplot(experiment, groups, show=False, image=False, html_file='volca
 
 	if image == True:
 		render_plot_to_png(html_file, height=600, width=600, crop='top')
-	
+
 	return html_file
 
 def do_heatmap(experiment, show=False, image=False, html_file='heatmap.html'):
@@ -312,7 +312,7 @@ def do_heatmap(experiment, show=False, image=False, html_file='heatmap.html'):
 
 	'''
 
-	## Creates a new data frame with nornalised expression data and cluster 
+	## Creates a new data frame with nornalised expression data and cluster
 	## numbers from hierarchical clustering.
 	cluster_df = get_clusters(experiment, how='hierarchical')
 
@@ -324,7 +324,7 @@ def do_heatmap(experiment, show=False, image=False, html_file='heatmap.html'):
 	colourmap = RdYlGn_11.hex_colors[::-1]
 	limit = np.abs(vals_only.values).max()
 	val_to_colour = lambda x: int((x + limit) * (len(colourmap)/(2*limit))) - 1
-	
+
 	## Empty lists to which we can add the data for the heatmap.
 	vals = []
 	colour = []
@@ -380,7 +380,7 @@ def do_heatmap(experiment, show=False, image=False, html_file='heatmap.html'):
 
 	if image == True:
 		render_plot_to_png(html_file, height=height, width=600, crop='top')
-	
+
 	return html_file
 
 def do_clusters_plot(experiment, show=True, image=False, html_file='clustersplot.html'):
@@ -395,7 +395,7 @@ def do_clusters_plot(experiment, show=True, image=False, html_file='clustersplot
 
 	'''
 
-	## Creates a new data frame with nornalised expression data and cluster 
+	## Creates a new data frame with nornalised expression data and cluster
 	## numbers from k-means clustering.
 	cluster_df = get_clusters(experiment, how='kmeans')
 	samples = experiment.get_sampleids()
@@ -411,11 +411,12 @@ def do_clusters_plot(experiment, show=True, image=False, html_file='clustersplot
 		vals = cluster[samples]
 		xvals = vals.columns.values.tolist()
 		yvals = vals.values.tolist()
-		clusterplot = create_standard_plot(tools='save')
+		clusterplot = create_standard_plot(tools='save', x_range=xvals)
+		clusterplot.xaxis.major_label_orientation = np.pi/3
 		clusterplot.yaxis.axis_label = 'normalised expression'
-		
+
 		for y in yvals:
-			clusterplot.line(range(len(xvals)), y, legend=False)
+			clusterplot.line(xvals, y, legend=False)
 
 		plots.append([clusterplot])
 
@@ -432,11 +433,11 @@ def do_clusters_plot(experiment, show=True, image=False, html_file='clustersplot
 
 	if image == True:
 		render_plot_to_png(html_file, height=height, width=600, crop='side')
-	
+
 	return html_file
 
 def render_plot_to_png(html_file, height=600, width=600, crop='top'):
-	'''Render a Bokeh plot to png file and crop out top toolbar, 
+	'''Render a Bokeh plot to png file and crop out top toolbar,
 	using PhantomJS.
 
 	Args:
@@ -477,5 +478,5 @@ def render_plot_to_png(html_file, height=600, width=600, crop='top'):
 	## Clean up.
 	os.remove(png_file)
 	os.remove(js_file)
-	
+
 	return out_file

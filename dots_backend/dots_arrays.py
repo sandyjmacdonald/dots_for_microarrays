@@ -34,27 +34,27 @@ class Array:
 		self.group = group
 		self.replicate = int(replicate)
 		self.sampleid = group + '_' + str(replicate)
-	
+
 	def get_probenames(self):
 		'''Return a list of the probe names from the array.'''
 
 		return self.df['ProbeName'].tolist()
-	
+
 	def get_genenames(self):
 		'''Return a list of the gene names from the array.'''
 
 		return self.df['GeneName'].tolist()
-	
+
 	def get_systematicnames(self):
 		'''Return a list of the systematics names from the array.'''
 
 		return self.df['SystematicName'].tolist()
-	
+
 	def get_descriptions(self):
 		'''Return a list of the descriptions from the array.'''
 
 		return self.df['Description'].tolist()
-	
+
 	def get_intensities(self):
 
 		'''Return a list of the intensity values from the array.'''
@@ -96,10 +96,10 @@ class Experiment:
 
 		self.arrays = arrays
 		master_array = self.arrays[0].df[['FeatureNum', 'ProbeName', 'GeneName', 'SystematicName', 'Description', 'gProcessedSignal_log2_shifted']].copy()
-		
+
 		## Rename the column containing the intesity values with the sample ID.
 		master_array.rename(columns={'gProcessedSignal_log2_shifted': self.arrays[0].sampleid}, inplace=True)
-		
+
 		## Pull out the group names and set the groups attribute.
 		self.groups = list(set([array.group for array in self.arrays]))
 
@@ -176,13 +176,14 @@ class Experiment:
 
 ## Functions ##
 
-def read_array(filename, group, replicate, annotations=None):
+def read_array(filename, group, replicate, annotations_file=None):
 	'''Read in a raw array data file and return an Array instance.
 
 	Args:
 			filename (str): The filename of the raw array data file.
 			group (str): The name of the group to which this array belongs.
 			replicate (int): The replicate number within the group.
+			annotations_file (str): The filename of the annotations file.
 
 	'''
 
@@ -190,7 +191,10 @@ def read_array(filename, group, replicate, annotations=None):
 	lines = f.readlines()
 	values = {}
 	headers = lines[9].rstrip().split('\t')
-	
+
+	if annotations_file is not None:
+		annotations = read_annotations(annotations_file)
+
 	## Compile a list of indices for the various items that will be pulled out of the file.
 	for i, h in enumerate(headers):
 		if h == 'FeatureNum':
@@ -208,19 +212,19 @@ def read_array(filename, group, replicate, annotations=None):
 		elif h == 'ControlType':
 			control_type_ind = i
 
-	## Split the lines up and use the indices to pull out the values and add them 
+	## Split the lines up and use the indices to pull out the values and add them
 	## to the values dictionary.
 	for l in lines[10:]:
 		l = l.rstrip().split('\t')
 		if l[control_type_ind] == '0':
-			if 'GeneName' in headers and 'Description' in headers: 
+			if 'GeneName' in headers and 'Description' in headers:
 				values[l[feature_num_ind]] = { 'FeatureNum': l[feature_num_ind], \
 											   'ProbeName': l[probe_name_ind], \
 											   'GeneName': l[gene_name_ind], \
 											   'SystematicName': l[sys_name_ind], \
 											   'Description': l[desc_name_ind], \
 											   'gProcessedSignal': l[signal_ind] }
-			elif annotations is not None:
+			elif annotations_file is not None:
 				values[l[feature_num_ind]] = { 'FeatureNum': l[feature_num_ind], \
 											   'ProbeName': l[probe_name_ind], \
 											   'GeneName': annotations[l[probe_name_ind]]['GeneName'], \
@@ -234,52 +238,53 @@ def read_array(filename, group, replicate, annotations=None):
 											   'SystematicName': l[sys_name_ind], \
 											   'Description': '', \
 											   'gProcessedSignal': l[signal_ind] }
-	
+
 	## Use the convenient Pandas function to create a data frame from a dictionary.
 	array_df = pd.DataFrame.from_dict(values, orient='index')
 
 	return Array(array_df, filename, group, replicate)
 
-def read_experiment(array_filenames, baseline=False, annotations=None):
+def read_experiment(array_filenames, baseline=False, annotations_file=None):
 	'''Read in a series of array data files and return an Experiment instance.
 
 	Args:
 			array_filenames (list): List of filenames of the raw array data files.
 			baseline (Boolean): Set the baseline to median?
+			annotations_file (str): The filename of the annotations file.
 
 	'''
-	
+
 	arrays = []
-	
+
 	## Loop through the array files, get the group and replicate, create a
 	## normalised Array instance, and then read all of the arrays into an
 	## Experiment instance with the baseline set to the median.
 	for a in array_filenames:
 		group, replicate = a.split('/')[-1].split('.')[0].split('_')
 		replicate = int(replicate)
-		norm_array = read_array(a, group, replicate, annotations).normalise()
+		norm_array = read_array(a, group, replicate, annotations_file).normalise()
 		arrays.append(norm_array)
 
 	experiment = Experiment(arrays)
 	if baseline is True:
 		experiment = experiment.baseline_to_median()
-	
+
 	return experiment
 
-def read_annotations(annotation_file):
+def read_annotations(annotations_file):
 	'''Read in an Agilent annotation file and return a dictionary
 	of annotations.
 
 	Args:
-			annotation_file (str): The filename of the annotation file.
+			annotations_file (str): The filename of the annotations file.
 
 	'''
 
-	f = open(annotation_file, 'r')
+	f = open(annotations_file, 'r')
 	lines = [l for l in f.readlines() if not l.startswith('#') and not l.startswith('^')]
 	headers = lines[0].rstrip().split('\t')
 
-	## Compile a list of indices for the various items that will be pulled out of the file.	
+	## Compile a list of indices for the various items that will be pulled out of the file.
 	for i, h in enumerate(headers):
 		if h == 'ProbeName' or h == 'NAME':
 			probe_name_ind = i
@@ -293,7 +298,7 @@ def read_annotations(annotation_file):
 	## Dictionary to which annotations are added.
 	annotations = {}
 
-	## Add the annotations to the dictionary.	
+	## Add the annotations to the dictionary.
 	for l in lines[1:]:
 		l = l.rstrip().split('\t')
 		if l[control_type_ind] not in ['pos', 1, 'ignore', 'neg']:

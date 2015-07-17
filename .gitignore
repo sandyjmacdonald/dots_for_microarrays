@@ -3,3 +3,6 @@
 dots_backend/db
 dots_backend/scratch.py
 sample_data_two
+build
+dist
+dots_for_microarrays.egg-info

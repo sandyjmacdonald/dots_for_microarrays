@@ -286,7 +286,7 @@ def read_annotations(annotations_file):
 
 	## Compile a list of indices for the various items that will be pulled out of the file.
 	for i, h in enumerate(headers):
-		if h == 'ProbeName' or h == 'NAME':
+		if h == 'ProbeName' or h == 'NAME' or h == 'ID':
 			probe_name_ind = i
 		elif h == 'GeneName' or h == 'GENE_SYMBOL':
 			gene_name_ind = i

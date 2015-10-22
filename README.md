@@ -9,7 +9,16 @@ isn't finished yet (more on that below).
 
 ## Installation
 
-**UPDATE:** Dots is now on PyPi! You can install it as follows:
+**IMPORTANT** Dots requires PhantomJS to render the html plots produced by
+Bokeh to png image files. The most recent version of PhantomJS (2.0) does not
+seem to work properly on OS X El Capitan, so I'd recommend using PhantomJS
+version 1.9.8. Download links for OS X, Windows and Linux are below.
+
+[PhantomJS 1.9.8, OS X](https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-macosx.zip)
+[PhantomJS 1.9.8, Windows](https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-windows.zip)
+[PhantomJS 1.9.8, Linux](https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2)
+
+Dots is now on PyPi! You can install it as follows:
 
 ```
 sudo pip install dots_for_microarrays

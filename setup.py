@@ -35,5 +35,6 @@ setup(
     setup_requires=[
         'nose',
         'numpy',
+        'scipy'
     ]
 )

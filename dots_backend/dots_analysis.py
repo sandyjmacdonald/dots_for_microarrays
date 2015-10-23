@@ -106,7 +106,7 @@ def run_stats(experiment):
 		ids = [sample for sample in samples if group == sample.split('_')[0]]
 		vals = map(list, df[ids].values)
 		all_vals.append(vals)
-	
+
 	## Decide whether to use T-test or ANOVA dependent on number of groups.
 	if len(groups) == 2:
 		p_vals = [ttest_ind(all_vals[0][i], all_vals[1][i])[1] for i in range(len(all_vals[0]))]
@@ -116,7 +116,7 @@ def run_stats(experiment):
 			row_vals = [all_vals[j][i] for j in range(len(groups))]
 			p_val = f_oneway(*row_vals)[1]
 			p_vals.append(p_val)
-	
+
 	## Adjust the p values and create a new data frame with them in.
 	p_val_adj = list(multipletests(p_vals, method='fdr_bh')[1])
 	new_df = df.ix[:, :5].copy()
@@ -149,7 +149,7 @@ def run_stats(experiment):
 					posthoc_results[pair_name].append(significant[i])
 				else:
 					posthoc_results[pair_name] = [significant[i]]
-		
+
 		## Add the post-hoc results to the data frame.
 		for pair_name in posthoc_results:
 			new_df['significant_' + pair_name] = posthoc_results[pair_name]
@@ -181,7 +181,7 @@ def find_clusters(df, k_range=(3,11), how='hierarchical'):
 	elif how == 'kmeans':
 		best_combined_score = 0
 		optimal_k = 2
-		
+
 		## Try values of k from range and keep track of optimal k according
 		## to silhouette score.
 		for k in range(*k_range):
@@ -198,12 +198,12 @@ def find_clusters(df, k_range=(3,11), how='hierarchical'):
 				silhouette_sizes.append(size_cluster_i)
 				if max(ith_cluster_silhouette_values) > silhouette_avg:
 					above_mean += 1
-			
+
 			## This combined score should pick the best value of k
 			above_mean_score = float(above_mean) / k
 			std_score = 1.0/np.std(silhouette_sizes) if np.std(silhouette_sizes) > 1.0 else 1.0
 			combined_score = (silhouette_avg + above_mean_score + std_score) / 3
-			
+
 			## Put the clusters in the new column in the data frame.
 			if combined_score > best_combined_score:
 				best_combined_score = combined_score
@@ -215,8 +215,8 @@ def find_clusters(df, k_range=(3,11), how='hierarchical'):
 	return optimal_clusters
 
 def get_clusters(experiment, how='hierarchical'):
-	'''Clusters significantly differentially expressed genes by expression pattern 
-	across the samples using hierarchical or k-means clustering and silhouette analysis 
+	'''Clusters significantly differentially expressed genes by expression pattern
+	across the samples using hierarchical or k-means clustering and silhouette analysis
 	to pick the value of k (via the find_clusters function).
 
 	Args:
@@ -232,12 +232,12 @@ def get_clusters(experiment, how='hierarchical'):
 	stats = run_stats(experiment)
 	stats = stats[['FeatureNum', 'p_val', 'p_val_adj']].copy()
 
-	## Get the fold changes 
-	fcs = get_fold_changes(experiment)	
+	## Get the fold changes
+	fcs = get_fold_changes(experiment)
 	keep_cols = [x for x in fcs.columns.values if 'logFC' in x or 'abs_mean_diff' in x]
 	fc_cols = [x for x in fcs.columns.values if 'logFC' in x]
 	fcs = fcs[['FeatureNum'] + keep_cols].copy()
-	
+
 	norm_exp_cols = experiment.get_sampleids()
 
 	abs_mean_diff_cols = [x for x in fcs.columns.values if 'abs_mean_diff' in x]
@@ -245,7 +245,7 @@ def get_clusters(experiment, how='hierarchical'):
 	## Merge together the stats and fold changes data frames.
 	merged_df = pd.merge(experiment.df, stats, on='FeatureNum')
 	merged_df = pd.merge(merged_df, fcs, on='FeatureNum')
-	
+
 	## Filter the merged data frame to leave only significantly differentially
 	## expressed genes (adj. p < 0.05. Also, increase the fold change cutoff until there
 	## are less than 2,500 rows left in the data frame (so that heat maps can be drawn).
@@ -276,7 +276,7 @@ def get_clusters(experiment, how='hierarchical'):
 		elif how == 'kmeans':
 			clusters = find_clusters(filtered_df[norm_exp_cols], k_range=(3, k_limit), how='kmeans')
 			filtered_df['cluster'] = clusters
-	
+
 	## Sort the data frame by cluster and mean expression across samples.
 	filtered_df['mean_norm_expression'] = filtered_df[norm_exp_cols].mean(axis=0)
 	filtered_df.sort(columns=['cluster', 'mean_norm_expression'], ascending=[True, False], inplace=True)
@@ -301,7 +301,7 @@ def write_fcs_stats(experiment, outfile='foldchanges_stats.txt'):
 	fcs = get_fold_changes(experiment)
 	fc_cols = [colname for colname in fcs.columns.values if not 'abs_mean_diff_' in colname]
 	merged_df = pd.merge(fcs, stats, on='FeatureNum')
-	
+
 	## Define the order of the columns in the data frame.
 	colnames = list(merged_df.columns.values)
 	global col_order

@@ -231,8 +231,6 @@ You can read them in as part of your `read_experiment` call as follows:
 experiment = read_experiment(array_filenames, baseline=True, annotations_file='annotations.txt')
 ```
 
-Note that the `annotations_file` is an
-
 ## The dots_analysis module
 
 This is the meat of the dots_backend.
@@ -271,14 +269,16 @@ clustering.
 The `find_clusters` function returns a list of cluster numbers in the same order as the rows in the
 experiment data frame. If the method is hierarchical - `how=`hierarchical` - then the number of
 clusters is set at the square root of (number of rows divided by two), a good approximation. If the
-method is k-means - `how='kmeans'` - then values of k (the number of clusters) from 3 to 10 are tested
-using silhouette analysis and the best value picked. An additional argument passed to the function -
-`k_range=(3,51)` allows you to increase the number of values tested to, in this example, 50. Here's
+method is k-means - `how='kmeans'` - then values of k (the number of clusters) for a range of square
+numbers are tested (4, 9, 16, 25)
+using [silhouette analysis](https://en.wikipedia.org/wiki/Silhouette_(clustering)) and the best value
+picked. An additional argument passed to the function -
+`k_vals=range(3,51)` allows you to increase the number of values tested to, in this example, 50. Here's
 how to get a list of clusters with either hierarchical or k-means clustering:
 
 ```python
 hier_clusters = find_clusters(experiment_med.df, how='hierarchical')
-km_clusters = find_clusters(experiment_med.df, k_range=(3,11), how='kmeans')
+km_clusters = find_clusters(experiment_med.df, k_vals=range(3,11), how='kmeans')
 ```
 
 The `get_clusters` function includes the functionality of the `find_clusters`function, but first
@@ -349,7 +349,3 @@ to plot on the volcano plot, for example:
 ```python
 do_volcanoplot(experiment, ('treated', 'untreated'), show=False, image=False, html_file='volcano_plot.html')
 ```
-
-**Note that the function, `render_plot_to_png`, that generates the PNG versions of the plots requires the
-[PhantomJS](http://phantomjs.org) JavaScript API to be installed (it's essentially a headless browser) to
-work properly.**

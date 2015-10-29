@@ -41,7 +41,7 @@ def test_find_clusters():
 	rows = np.random.choice(df.index.values, num_samples)
 	sampled_df = df.ix[rows]
 	hier = find_clusters(sampled_df, how='hierarchical')
-	kmeans = find_clusters(sampled_df, k_range=(3,6), how='kmeans')
+	kmeans = find_clusters(sampled_df, k_vals=range(3,6), how='kmeans')
 	assert_equals(len(hier), num_samples)
 	assert_equals(len(kmeans), num_samples)
 

@@ -35,7 +35,7 @@ for i, h in enumerate(headers):
 	elif h == 'ControlType':
 		control_type_ind = i
 
-## Split the lines up and use the indices to pull out the values and add them 
+## Split the lines up and use the indices to pull out the values and add them
 ## to the values dictionary.
 for l in lines[10:]:
 	l = l.split('\t')
@@ -53,30 +53,30 @@ for l in lines[10:]:
 array = read_array(array_fn, group, replicate)
 
 def test_probenames():
-	assert_equals(sorted(array.get_probenames()), 
+	assert_equals(sorted(array.get_probenames()),
 				  sorted([feat['ProbeName'] for feat in values.values()]))
 
 def test_genenames():
-	assert_equals(sorted(array.get_genenames()), 
+	assert_equals(sorted(array.get_genenames()),
 				  sorted([feat['GeneName'] for feat in values.values()]))
 
 def test_systematicnames():
-	assert_equals(sorted(array.get_systematicnames()), 
+	assert_equals(sorted(array.get_systematicnames()),
 				  sorted([feat['SystematicName'] for feat in values.values()]))
 
 def test_descriptions():
-	assert_equals(sorted(array.get_descriptions()), 
+	assert_equals(sorted(array.get_descriptions()),
 				  sorted([feat['Description'] for feat in values.values()]))
 
 def test_intensities():
-	assert_equals(sorted(array.get_intensities()), 
+	assert_equals(sorted(array.get_intensities()),
 				  sorted([float(feat['gProcessedSignal']) for feat in values.values()]))
 
 def test_normalisation():
 	intensities = [float(feat['gProcessedSignal']) if float(feat['gProcessedSignal']) > 1.0 else 1.0 for feat in values.values()]
 	logged = np.log2(intensities)
 	logged_shifted = logged - np.percentile(logged, 75)
-	assert_equals(sorted(array.get_normalised_intensities()), 
+	assert_equals(sorted(array.get_normalised_intensities()),
 				  sorted(logged_shifted))
 
 def test_read_array():
@@ -104,8 +104,8 @@ def test_read_experiment():
 
 def test_arrays_attribute():
 	array_exp = [array for array in experiment_2.arrays if array.sampleid == 'treated_1'][0]
-	exp_df = array_exp.df.sort(axis=1)
-	array_df = array.df.sort(axis=1)
+	exp_df = array_exp.df.sort_values(by='FeatureNum', inplace=True)
+	array_df = array.df.sort_values(by='FeatureNum', inplace=True)
 	npt.assert_array_equal(exp_df, array_df)
 	assert_equals(sorted(experiment.get_sampleids()), sorted(sampleids))
 

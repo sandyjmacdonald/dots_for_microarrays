@@ -156,13 +156,13 @@ def run_stats(experiment):
 
 	return new_df
 
-def find_clusters(df, k_range=(3,11), how='hierarchical'):
+def find_clusters(df, k_vals=[4, 9, 16, 25], how='hierarchical'):
 	'''Find clusters, and if method is k-means run silhouette analysis
 	to determine the value of k.
 
 	Args:
 		df (data frame): A data frame with normalised expression data.
-		k_range (tuple): The range over which to test k.
+		k_vals (list or range): The range over which to test k.
 		how ('hierarchical' or 'kmeans'): Clustering method.
 
 	Returns:
@@ -184,7 +184,7 @@ def find_clusters(df, k_range=(3,11), how='hierarchical'):
 
 		## Try values of k from range and keep track of optimal k according
 		## to silhouette score.
-		for k in range(*k_range):
+		for k in k_vals:
 			km = KMeans(n_clusters=k, random_state=10)
 			clusters = km.fit_predict(df)
 			silhouette_avg = silhouette_score(df, clusters)
@@ -274,12 +274,12 @@ def get_clusters(experiment, how='hierarchical'):
 
 		## K-means clustering with silhouette analysis to determine value of k.
 		elif how == 'kmeans':
-			clusters = find_clusters(filtered_df[norm_exp_cols], k_range=(3, k_limit), how='kmeans')
+			clusters = find_clusters(filtered_df[norm_exp_cols], k_vals=range(3, k_limit), how='kmeans')
 			filtered_df['cluster'] = clusters
 
 	## Sort the data frame by cluster and mean expression across samples.
 	filtered_df['mean_norm_expression'] = filtered_df[norm_exp_cols].mean(axis=0)
-	filtered_df.sort(columns=['cluster', 'mean_norm_expression'], ascending=[True, False], inplace=True)
+	filtered_df.sort_values(by=['cluster', 'mean_norm_expression'], ascending=[True, False], inplace=True)
 	filtered_df = filtered_df.reset_index(drop=True)
 
 	return filtered_df
@@ -320,7 +320,7 @@ def write_fcs_stats(experiment, outfile='foldchanges_stats.txt'):
 
 	## Fix the type of the FeatureNum column and sort it.
 	merged_df['FeatureNum'] = merged_df['FeatureNum'].astype(int)
-	merged_df.sort(columns='FeatureNum', ascending=True, inplace=True)
+	merged_df.sort_values(by='FeatureNum', ascending=True, inplace=True)
 
 	## Write the table.
 	merged_df.to_csv(outfile, sep='\t', index=False)

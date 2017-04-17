@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/sandyjmacdonald/dots_for_microarrays.png?label=ready&title=Ready)](https://waffle.io/sandyjmacdonald/dots_for_microarrays)
 # Dots
 
 [![Build Status](https://travis-ci.org/sandyjmacdonald/dots_for_microarrays.svg?branch=master)](https://travis-ci.org/sandyjmacdonald/dots_for_microarrays) [![Coverage Status](https://coveralls.io/repos/sandyjmacdonald/dots_for_microarrays/badge.svg?branch=master&service=github)](https://coveralls.io/github/sandyjmacdonald/dots_for_microarrays?branch=master) [![Code Health](https://landscape.io/github/sandyjmacdonald/dots_for_microarrays/master/landscape.svg?style=flat)](https://landscape.io/github/sandyjmacdonald/dots_for_microarrays/master)

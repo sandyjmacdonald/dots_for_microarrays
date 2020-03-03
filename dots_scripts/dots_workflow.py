@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 import glob
@@ -8,42 +7,51 @@ from dots_backend.dots_plotting import do_boxplot, do_pcaplot, do_volcanoplot, d
 from dots_backend.dots_arrays import read_experiment
 from dots_backend.dots_analysis import get_fold_changes, write_fcs_stats, write_normalised_expression
 
-## Set up argparse arguments
+#  Set up argparse arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('input', help='input folder, .e.g arrays')
 parser.add_argument('-o', '--output', help='name of output folder')
 args = parser.parse_args()
 
-## Set up output folder.
+#  Set up output folder.
 if args.output:
-	outfolder = args.output if args.output.endswith('/') else args.output + '/'
+    outfolder = args.output if args.output.endswith('/') else args.output + '/'
 else:
-	outfolder = 'output/'
+    outfolder = 'output/'
 
 if not os.path.isdir(outfolder):
-	os.makedirs(outfolder)
+    os.makedirs(outfolder)
 
-## Read in files and create experiment.
+#  Read in files and create experiment.
+print('Reading in files and creating experiment...')
 array_filenames = glob.glob(args.input + '*.txt' if args.input.endswith('/') else args.input + '/*.txt')
 experiment = read_experiment(array_filenames)
 experiment = experiment.baseline_to_median()
 
-## Write tables.
+#  Write tables.
+print('Writing fold change and normalised expression tables...')
 write_fcs_stats(experiment, outfile=outfolder + 'foldchanges_stats.txt')
 write_normalised_expression(experiment, outfile=outfolder + 'normalised_expression.txt')
 
-## Do plots.
+#  Do plots.
+print('Drawing boxplots...')
 do_boxplot(experiment, show=False, image=True, html_file=outfolder + 'boxplot.html')
+print('Drawing PCA plots...')
 do_pcaplot(experiment, show=False, image=True, html_file=outfolder + 'pcaplot.html')
+print('Drawing heatmap...')
 do_heatmap(experiment, show=False, image=True, html_file=outfolder + 'heatmap.html')
+print('Drawing clusters plot...')
 do_clusters_plot(experiment, show=False, image=True, html_file=outfolder + 'clustersplot.html')
 
-## Get fold change columns for volcano plots.
+#  Get fold change columns for volcano plots.
 fcs = get_fold_changes(experiment)
 fc_cols = [x for x in fcs.columns.values if 'logFC' in x]
 
-## For each pair of groups, create a volcano plot.
+#  For each pair of groups, create a volcano plot.
+print('Drawing volcano plots...')
 for col in fc_cols:
-	pair = col[6:]
-	groups = tuple(pair.split('_'))
-	do_volcanoplot(experiment, groups, show=False, image=True, html_file=outfolder + pair + '_volcanoplot.html')
+    pair = col[6:]
+    groups = tuple(pair.split('_'))
+    do_volcanoplot(experiment, groups, show=False, image=True, html_file=outfolder + pair + '_volcanoplot.html')
+
+print('Workflow complete!')

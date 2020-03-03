@@ -6,3 +6,4 @@ build
 dist
 dots_for_microarrays.egg-info
 output
+sample_data_output

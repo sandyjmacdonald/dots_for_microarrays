@@ -9,57 +9,31 @@ isn't finished yet (more on that below).
 
 ## Installation
 
-**IMPORTANT** Dots requires PhantomJS to render the html plots produced by
-Bokeh to png image files. The most recent version of PhantomJS (2.0) does not
-seem to work properly on OS X El Capitan, so I'd recommend using PhantomJS
-version 1.9.8. Download links for OS X, Windows and Linux are below.
-
-[PhantomJS 1.9.8, OS X](https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-macosx.zip)  
-[PhantomJS 1.9.8, Windows](https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-windows.zip)  
-[PhantomJS 1.9.8, Linux](https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2)
-
-Dots is now on PyPi! You can install it as follows:
-
-```
-sudo pip install dots_for_microarrays
-```
-
-**OR, ALTERNATIVELY:**
-
 Dots has a number of dependencies including NumPy and SciPy and the least painful
 way of getting these is to use the
-[Anaconda Python distribution](https://store.continuum.io/cshop/anaconda/) which includes
-NumPy and SciPy and a couple of the other required dependencies like Pandas, Scikit-learn
-and Bokeh.
+[Anaconda Python distribution](https://www.anaconda.com/distribution/#download-section) which
+includes NumPy and SciPy and a couple of the other required dependencies like Pandas, Scikit-learn
+and Bokeh. It also requires Selenium, Firefox, and GeckoDriver to render images of the plots.
 
-Once you've downloaded and installed Anaconda, you can install the Dots package as follows:
-
-```
-git clone https://github.com/sandyjmacdonald/dots_for_microarrays
-cd dots_for_microarrays
-sudo python setup.py install
-```
-
-Setuptools should take care of the dependencies but, in testing, I've found the NumPy, SciPy
-and Scikit-learn installations to be problematic, hence my recommendation of using Anaconda
-to relieve those headaches.
-
-Once you have Anaconda, if you'd like to install and use Dots in a fenced-off virtual
-environment that won't interfere with anything else, then you can do so as follows:
+Once you've downloaded and installed Anaconda, you can install and use Dots and its dependencies
+in a fenced-off virtual environment that won't interfere with anything else, as follows:
 
 ```
-conda create --yes -n dots_env python=2.7
-source activate dots_env
+conda create --yes -n dots_env python=3.7
+conda activate dots_env
+
+conda install selenium
+conda install -c conda-forge firefox geckodriver
 
 git clone https://github.com/sandyjmacdonald/dots_for_microarrays
 cd dots_for_microarrays
-sudo python setup.py install
+sudo python3 setup.py install
 ```
 
 To test that the installation has worked, you can run Nosetests as follows:
 
 ```
-sudo python setup.py nosetests
+sudo python3 setup.py nosetests
 ```
 
 ## What Dots does

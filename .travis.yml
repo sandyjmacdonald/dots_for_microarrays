@@ -1,14 +1,14 @@
 language: python
 python:
-  - 2.7
+  - 3.7
 
 # Install
 install:
   - sudo apt-get -q update
   - sudo apt-get -q install gfortran libblas-dev libatlas-dev liblapack-dev
-  - pip install python-coveralls
-  - pip install coverage
-  - python setup.py -q install
+  - pip3 install python-coveralls
+  - pip3 install coverage
+  - python3 setup.py -q install
 
 # Test
 script: 

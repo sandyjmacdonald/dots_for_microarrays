@@ -1,3 +1,12 @@
+> [!IMPORTANT]
+> **This repository has moved to Codeberg.**
+>
+> Active development now happens at **[https://codeberg.org/sandyjmacdonald/dots_for_microarrays](https://codeberg.org/sandyjmacdonald/dots_for_microarrays)**.
+>
+> This GitHub copy is archived and read-only. Please file issues, open pull requests, and follow the project on Codeberg.
+
+---
+
 # Dots
 
 [![Build Status](https://travis-ci.org/sandyjmacdonald/dots_for_microarrays.svg?branch=master)](https://travis-ci.org/sandyjmacdonald/dots_for_microarrays) [![Coverage Status](https://coveralls.io/repos/sandyjmacdonald/dots_for_microarrays/badge.svg?branch=master&service=github)](https://coveralls.io/github/sandyjmacdonald/dots_for_microarrays?branch=master) [![Code Health](https://landscape.io/github/sandyjmacdonald/dots_for_microarrays/master/landscape.svg?style=flat)](https://landscape.io/github/sandyjmacdonald/dots_for_microarrays/master)
